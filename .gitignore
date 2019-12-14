@@ -1,0 +1,7 @@
+# ignore object files
+*.o
+/build/**
+# ignore executable
+/bin/**
+# ignore tests
+/tests/**
