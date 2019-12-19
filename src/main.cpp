@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     myFile.open(argv[1], std::ifstream::in);
 
     Graph g(myFile);
-    g.show(std::cout);
+    g.densest(std::cout);
 
     myFile.close();
     return EXIT_SUCCESS;
