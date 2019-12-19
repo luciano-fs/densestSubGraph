@@ -4,11 +4,14 @@ Graph::Graph(std::ifstream& input)
 {
     int x,y;
 
-    // Parse header of input file
+    /* Parse two line header of input file
     input.ignore(255, '\n');
     input.ignore(255, ' ');
     input >> m >> n;
     input.ignore(255, '\n');
+    */
+
+    input >> n >> m;
 
     ndeg = new int[n];
     for(int i = 0; i < n; ++i)
@@ -66,20 +69,22 @@ void Graph::show(std::ostream& output)
 void Graph::densest(std::ostream& output)
 {
     int curM = m;
+    int maxM = m;
     int curN = n;
+    int maxN = n;
     int v;
     float maxDens = (static_cast<float>(m))/n;
     bool curV[n];
     bool maxV[n];
+    std::list<int> modif;
 
     for (int i = 0; i < n; ++i)
-        curV[i] = true;
-    for (int i = 0; i < n; ++i)
-        maxV[i] = true;
+        curV[i] = maxV[i] = true;
 
     while (curM) {
         v = deg[nMinDeg].front();
         deg[nMinDeg].pop_front();
+        modif.push_back(v);
         curV[v-1] = false;
         --curN;
         curM -= ndeg[v-1];
@@ -99,14 +104,18 @@ void Graph::densest(std::ostream& output)
 
         if ((static_cast<float>(curM))/curN >= maxDens) {
             maxDens = (static_cast<float>(curM))/curN;
-            for (int i = 0; i < n; ++i)
-                maxV[i] = curV[i];
+            maxM = curM;
+            maxN = curN;
+            for (int i : modif)
+                maxV[i-1] = false;
+            modif.clear();
         }
     }
 
-    output << "Densest Graph:" << std::endl;
+    output << maxN << ' ' << maxM << std::endl;
     for (int i = 0; i < n; ++i)
         if (maxV[i])
-            output << i+1 << ' ';
-    output << std::endl;
+            for (int it : adj[i])
+                if (maxV[it-1] && (i + 1) < it)
+                   output << i + 1 << ' ' << it << std::endl; 
 }

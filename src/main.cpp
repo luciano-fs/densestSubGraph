@@ -4,12 +4,15 @@
 
 int main(int argc, char *argv[])
 {
-    std::ifstream myFile;
-    myFile.open(argv[1], std::ifstream::in);
+    std::ifstream input;
+    std::ofstream output;
+    input.open(argv[1], std::ifstream::in);
+    output.open(argv[2], std::ofstream::out);
 
-    Graph g(myFile);
-    g.densest(std::cout);
+    Graph g(input);
+    g.densest(output);
 
-    myFile.close();
+    input.close();
+    output.close();
     return EXIT_SUCCESS;
 }
