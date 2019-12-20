@@ -18,6 +18,7 @@ Graph::Graph(std::ifstream& input)
         ndeg[i] = 0;
 
     adj = new std::list<int>[n];
+    ideg = new std::list<int>::iterator[n];
 
     for (int i = 0; i < m; ++i) {
         input >> x;
@@ -36,8 +37,10 @@ Graph::Graph(std::ifstream& input)
             nMaxDeg = ndeg[i];
 
     deg = new std::list<int>[nMaxDeg + 1];
-    for (int i = 0; i < n; ++i)
-        deg[ndeg[i]].push_back(i+1);
+    for (int i = 0; i < n; ++i) {
+        deg[ndeg[i]].push_front(i+1);
+        ideg[i] = deg[ndeg[i]].begin();
+    }
 
 }
 
@@ -46,6 +49,7 @@ Graph::~Graph()
     delete[] adj;
     delete[] deg;
     delete[] ndeg;
+    delete[] ideg;
 }
 
 void Graph::show(std::ostream& output)
@@ -91,9 +95,10 @@ void Graph::densest(std::ostream& output)
 
         for (int it : adj[v-1]) {
             if (curV[it-1]) {
-                deg[ndeg[it-1]].remove(it);
+                deg[ndeg[it-1]].erase(ideg[it-1]);
                 --ndeg[it-1];
-                deg[ndeg[it-1]].push_back(it);
+                deg[ndeg[it-1]].push_front(it);
+                ideg[it-1] = deg[ndeg[it-1]].begin();
                 if (ndeg[it-1] < nMinDeg)
                     nMinDeg = ndeg[it-1];
             }

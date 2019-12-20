@@ -11,6 +11,7 @@ private:
     std::list<int>* adj; //Graph's adjancency matrix
     std::list<int>* deg; //Lists of nodes indexed by their degrees
     int *ndeg; //Array of vertices degrees indexed by id
+    std::list<int>::iterator* ideg; //iterator for each node in its degree list
     int m; //Graph number of edges
     int n; //Graph number of vertices
     int nMinDeg; //Min degree of a node in given graph
