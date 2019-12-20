@@ -1,7 +1,7 @@
 CC := g++ # This is the main compiler
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/tp
+TARGET := bin/densestSubGraph
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
