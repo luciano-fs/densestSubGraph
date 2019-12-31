@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
-#include <stdlib.h>
+#include <cstdlib>
 #include "graph.h"
 
 void streamDensest(int, std::ifstream&, std::ofstream&);
@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
     std::ofstream output;
 
     if (!strcmp(argv[1], "-s")) {
-        int epsilon = atoi (argv[2]);
-        input.open(argv[2], std::ifstream::in);
-        output.open(argv[3], std::ofstream::out);
+        float epsilon = atof (argv[2]);
+        input.open(argv[3], std::ifstream::in);
+        output.open(argv[4], std::ofstream::out);
         streamDensest(epsilon, input, output);
     }
     else {

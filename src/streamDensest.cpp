@@ -6,63 +6,72 @@ void streamDensest
 {
     int m, n;
     int maxM, maxN;
+    int curM, curN;
     int x, y;
-    float gDeg;
+    float gDens;
     float maxDens = 0;
     int* deg;
     bool* maxGraph;
-    bool ready = false;
 
     input >> n >> m; 
     deg = new int[n]; //Stores node degrees and -1 when they are cut
     maxGraph = new bool[n];
+    curM = maxM = m;
+    curN = maxN = n;
+    maxDens = static_cast<float>(maxM)/maxN;
     
     for (int i = 0; i < n; ++i) {
         deg[i] = 0;
         maxGraph[i] = true;
     }
 
-    std::cout << "OK " << n << ' ' << m << std::endl << std::flush;
-
-    while (!input.eof()) {
+    while (true) {
         input >> x >> y;
+        if (input.eof())
+            break;
         ++deg[x-1];
         ++deg[y-1];
     }
 
-    while (!ready) {
-        ready = true;
-        gDeg = static_cast<float>(m)/n;
-        if (gDeg > maxDens) {
-            maxDens = gDeg;
-            maxM = m;
-            maxN = n;
+    while (curM != 0) {
+        gDens = static_cast<float>(curM)/curN;
+        if (gDens > maxDens) {
+            maxDens = gDens;
+            maxM = curM;
+            maxN = curN;
             for (int i = 0; i < n; ++i)
                 if (deg[i] == -1)
                     maxGraph[i] = false;
         }
+
         for (int i = 0; i < n; ++i)
-            if (deg[i] != -1 && deg[i] <= gDeg) {
+            if (deg[i] != -1 && deg[i] <= 2*(1+eps)*gDens) {
                 deg[i] = -1;
-                --n;
+                --curN;
             }
-            else
+            else if (deg[i] != -1)
                 deg[i] = 0;
-        m = 0;
-        input.seekg(0, input.beg);
+
+        curM = 0;
+        input.clear();
+        input.seekg(0, input.beg); //Rewinds file
         input.ignore(255, '\n'); //Ignores original graph size
-        while (!input.eof()) {
+
+        while (true) {
             input >> x >> y;
+            if (input.eof())
+                break;
             if (deg[x-1] != -1 && deg[y-1] != -1) {
-                ready = false;
-                ++m;
+                ++curM;
                 ++deg[x-1];
                 ++deg[y-1];
             }
         }
+
     }
 
-    output << maxN << maxM << std::endl;
+    output << maxN << ' ' << maxM << std::endl;
+    input.clear();
     input.seekg(0, input.beg);
     input.ignore(255, '\n');
     while (!input.eof()) {
