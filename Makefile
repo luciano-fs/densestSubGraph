@@ -6,7 +6,7 @@ TARGET := bin/densestSubGraph
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -O3 -Wall
+CFLAGS := -g -Wall
 INC := -I include
 
 $(TARGET): $(OBJECTS)

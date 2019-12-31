@@ -21,8 +21,7 @@ Graph::Graph(std::ifstream& input)
     ideg = new std::list<int>::iterator[n];
 
     for (int i = 0; i < m; ++i) {
-        input >> x;
-        input >> y;
+        input >> x >> y;
         ++ndeg[x-1];
         ++ndeg[y-1];
         adj[x-1].push_back(y);
