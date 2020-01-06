@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include "graph.h"
 
-void streamDensest(int, std::ifstream&, std::ofstream&);
+void streamDensest(float, std::ifstream&, std::ofstream&);
 
 int main(int argc, char *argv[])
 {

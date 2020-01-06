@@ -2,7 +2,7 @@
 #include <iostream>
 
 void streamDensest
-    (int eps, std::ifstream& input, std::ofstream& output)
+    (float eps, std::ifstream& input, std::ofstream& output)
 {
     int m, n;
     int maxM, maxN;
@@ -12,6 +12,7 @@ void streamDensest
     float maxDens = 0;
     int* deg;
     bool* maxGraph;
+
 
     input >> n >> m; 
     deg = new int[n]; //Stores node degrees and -1 when they are cut
