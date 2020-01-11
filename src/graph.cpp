@@ -3,14 +3,6 @@
 Graph::Graph(std::ifstream& input) 
 {
     int x,y;
-
-    /* Parse two line header of input file
-    input.ignore(255, '\n');
-    input.ignore(255, ' ');
-    input >> m >> n;
-    input.ignore(255, '\n');
-    */
-
     input >> n >> m;
 
     ndeg = new int[n];
@@ -79,12 +71,14 @@ void Graph::densest(std::ostream& output)
     float maxDens = (static_cast<float>(m))/n;
     bool curV[n];
     bool maxV[n];
-    std::list<int> modif;
+    //Keeps track of the changes in the graph since the last densest subgraph was seen
+    std::list<int> modif; 
 
     for (int i = 0; i < n; ++i)
         curV[i] = maxV[i] = true;
 
     while (curM) {
+        //Takes the node of minimum degree in the graph
         v = deg[nMinDeg].front();
         deg[nMinDeg].pop_front();
         modif.push_back(v);
@@ -94,19 +88,24 @@ void Graph::densest(std::ostream& output)
 
         for (int it : adj[v-1]) {
             if (curV[it-1]) {
+                //Decreases the degree of all neighbours of v
                 deg[ndeg[it-1]].erase(ideg[it-1]);
                 --ndeg[it-1];
                 deg[ndeg[it-1]].push_front(it);
                 ideg[it-1] = deg[ndeg[it-1]].begin();
                 if (ndeg[it-1] < nMinDeg)
+                    //Checks to see if the mindeg was decreased
                     nMinDeg = ndeg[it-1];
             }
         }
 
         while (deg[nMinDeg].empty())
+            //Searches for new minDeg
             ++nMinDeg;
 
         if ((static_cast<float>(curM))/curN >= maxDens) {
+            //If the new subgraph is denser than the previous densest, updates it and
+            //cleans the list of modifications keeping track of the new ones
             maxDens = (static_cast<float>(curM))/curN;
             maxM = curM;
             maxN = curN;
@@ -116,6 +115,7 @@ void Graph::densest(std::ostream& output)
         }
     }
 
+    //Stores the result in a file
     output << maxN << ' ' << maxM << std::endl;
     for (int i = 0; i < n; ++i)
         if (maxV[i])

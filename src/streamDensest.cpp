@@ -21,6 +21,7 @@ void streamDensest
     curN = maxN = n;
     maxDens = static_cast<float>(maxM)/maxN;
     
+    //Initially, the densest subgraph is the whole graph
     for (int i = 0; i < n; ++i) {
         deg[i] = 0;
         maxGraph[i] = true;
@@ -35,6 +36,7 @@ void streamDensest
     }
 
     while (curM != 0) {
+        //Updates densest subgraph
         gDens = static_cast<float>(curM)/curN;
         if (gDens > maxDens) {
             maxDens = gDens;
@@ -45,11 +47,13 @@ void streamDensest
                     maxGraph[i] = false;
         }
 
+        //Cuts nodes whose degrees are lower than the threshold
         for (int i = 0; i < n; ++i)
             if (deg[i] != -1 && deg[i] <= 2*(1+eps)*gDens) {
                 deg[i] = -1;
                 --curN;
             }
+            //Prepares to count the degree of the remaining nodes
             else if (deg[i] != -1)
                 deg[i] = 0;
 
@@ -59,6 +63,7 @@ void streamDensest
         input.ignore(255, '\n'); //Ignores original graph size
 
         while (true) {
+            //Counts the degree of the remaining nodes
             input >> x >> y;
             if (input.eof())
                 break;
@@ -71,6 +76,7 @@ void streamDensest
 
     }
 
+    //Stores the answer in a file
     output << maxN << ' ' << maxM << std::endl;
     input.clear();
     input.seekg(0, input.beg);
